@@ -6,5 +6,12 @@ namespace AvailableResourceUpdate
 {
     class ConfigFileParser
     {
+        string fileToParse;
+
+        public ConfigFileParser(string fileName)
+        {
+            this.fileToParse = fileName;
+        }
+
     }
 }
