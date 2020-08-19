@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AvailableResourceUpdate
@@ -11,14 +12,24 @@ namespace AvailableResourceUpdate
 
             string configFilePath = "configFile.txt"; //later can be given as argument, now it is not necessary
 
-            if (!File.Exists(configFilePath))
+            try
             {
-                Console.WriteLine("No config file!");
-                Console.WriteLine("Ending the program ...");
-                return;
+                ConfigFileParser configParser = new ConfigFileParser(configFilePath);
+                ConfigInfo ci = configParser.Parse();
+
+                DbsParser dbsParser = new DbsParser(ci.PathToDbs, ci.DbsFileName);
+                Dictionary<string, Page> dbs = dbsParser.Parse();
             }
-
-
+            catch (InvalidConfigFileException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine("Ending program ...");
+            }
+            catch (InvalidDbsFileException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine("Ending program ...");
+            }
         }
     }
 }
